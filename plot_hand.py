@@ -7,14 +7,15 @@ from mpl_toolkits.mplot3d import Axes3D
 # Leap Motion Controller Setup
 controller = Leap.Controller()
 controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
+NUM_POINTS = 22
 
 # Matplotlib Setup
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d', xlim=(-300, 300), ylim=(-200, 400), zlim=(-300, 300))
 ax.view_init(elev=45., azim=122)
 
-points = np.zeros((3, 22))
-patches = ax.scatter(points[0], points[1], points[2], s=[20]*22, alpha=1)
+points = np.zeros((3, NUM_POINTS))
+patches = ax.scatter(points[0], points[1], points[2], s=[20]*NUM_POINTS, alpha=1)
 
 def get_points():
 	frame = controller.frame()
@@ -32,11 +33,15 @@ def get_points():
 	Z.append(hand.palm_position.z)
 
 	# Add wrist position
-	arm = hand.arm
-	print(arm.wrist_position)
-	X.append(arm.wrist_position.x)
-	Y.append(arm.wrist_position.y)
-	Z.append(arm.wrist_position.z)
+	X.append(hand.wrist_position.x)
+	Y.append(hand.wrist_position.y)
+	Z.append(hand.wrist_position.z)
+
+	# Add Elbow
+	#arm = hand.arm
+	#X.append(arm.elbow_position.x)
+	#Y.append(arm.elbow_position.y)
+	#Z.append(arm.elbow_position.z)
 
 	# Add fingers
 	for finger in fingers:
@@ -69,7 +74,7 @@ def animate(i):
 	if (i == 300):
 		print("Wooooo")
 		save_points(points, 'test_points.csv')
-		##quit()
+		quit()
 	return patches,
 
 def main():
