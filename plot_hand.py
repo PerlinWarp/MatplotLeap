@@ -29,12 +29,12 @@ def get_points():
 	Z = []
 
 	# Add the position of the palms
-	X.append(hand.palm_position.x)
+	X.append(-1 *hand.palm_position.x)
 	Y.append(hand.palm_position.y)
 	Z.append(hand.palm_position.z)
 
 	# Add wrist position
-	X.append(hand.wrist_position.x)
+	X.append(-1 * hand.wrist_position.x)
 	Y.append(hand.wrist_position.y)
 	Z.append(hand.wrist_position.z)
 
@@ -53,7 +53,7 @@ def get_points():
 			2 = JOINT_DIP – The distal interphalangeal joint of the finger. This joint is closest to the tip.
 			3 = JOINT_TIP – The tip of the finger.
 			'''
-			X.append(finger.joint_position(joint)[0])
+			X.append(-1 * finger.joint_position(joint)[0])
 			Y.append(finger.joint_position(joint)[1])
 			Z.append(finger.joint_position(joint)[2])
 
