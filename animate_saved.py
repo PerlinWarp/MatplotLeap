@@ -6,8 +6,11 @@ import mpl_toolkits.mplot3d as plt3d
 
 #from plot_hand import plot_lines
 NUM_POINTS = 22
+# Skip first row as we dont care about columns
+all_points = np.loadtxt('all_points.csv', delimiter=',', skiprows=1)
 
-all_points = np.loadtxt('all_points.csv', delimiter=',')
+## To Remove all rows that only contain zero, when the hand was not in range
+#data = data[~np.all(data == 0, axis=1)]
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d', xlim=(-300, 400), ylim=(-200, 400), zlim=(-300, 300))
