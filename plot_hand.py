@@ -10,8 +10,19 @@ controller = Leap.Controller()
 controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
 NUM_POINTS = 22
 
+SAVE = True
+points_list = []
+
+def on_close(event):
+	print("Closed Figure")
+
+	if (SAVE):
+		print("Saving all points gathered")
+		np.savetxt("all_points.csv", points_list, delimiter=',')
+
 # Matplotlib Setup
 fig = plt.figure()
+fig.canvas.mpl_connect('close_event', on_close)
 ax = fig.add_subplot(111, projection='3d', xlim=(-300, 300), ylim=(-200, 400), zlim=(-300, 300))
 ax.view_init(elev=45., azim=122)
 
@@ -60,6 +71,7 @@ def get_points():
 	return np.array([X, Z, Y])
 
 def save_points(points,name='points.csv'):
+	# Save one single row to disk
 	np.savetxt(name, points, delimiter=',')
 
 def plot_points(points):
@@ -127,17 +139,13 @@ def animate(i):
 	ax.set_zlabel('Z [mm]')
 
 	points = get_points()
-	#print(points)
+	if (SAVE):
+		points_list.append(points.flatten())
 
 	patches = ax.scatter(points[0], points[1], points[2], s=[10]*NUM_POINTS, alpha=1)
 	plot_points(points)
 	plot_lines(points)
 
-	# Save some test points for us to work with. 
-	if (i == 300):
-		print("Wooooo")
-		save_points(points, 'test_points.csv')
-		##quit()
 	return patches,
 
 def main():
