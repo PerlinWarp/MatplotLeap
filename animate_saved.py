@@ -25,10 +25,10 @@ def plot_points(points):
 
 def plot_lines(points):
     mcps = []
-    
+
     # Wrist
     wrist = points[:,1]
-    
+
     # For Each of the 5 fingers
     for i in range(0,5):
         n = 4*i + 2
@@ -38,18 +38,18 @@ def plot_lines(points):
         pip = points[:,n+1]
         dip = points[:,n+2]
         tip = points[:,n+3]
-        
-        # Connect the lowest joint to the middle joint    
+
+        # Connect the lowest joint to the middle joint
         bot = plt3d.art3d.Line3D([mcp[0], pip[0]], [mcp[1], pip[1]], [mcp[2], pip[2]])
         ax.add_line(bot)
-        
+
         # Connect the middle joint to the top joint
         mid = plt3d.art3d.Line3D([pip[0], dip[0]], [pip[1], dip[1]], [pip[2], dip[2]])
-        ax.add_line(mid)       
-        
+        ax.add_line(mid)
+
         # Connect the top joint to the tip of the finger
         top = plt3d.art3d.Line3D([dip[0], tip[0]], [dip[1], tip[1]], [dip[2], tip[2]])
-        ax.add_line(top)        
+        ax.add_line(top)
 
         # Connect each of the fingers together
         mcps.append(mcp)
@@ -63,11 +63,19 @@ def plot_lines(points):
                                   [wrist[1], mcps[3+1][1]],
                                   [wrist[2], mcps[3+1][2]])
     ax.add_line(line)
-    
+
     # Generate the "Wrist", note right side is not right.
     line = plt3d.art3d.Line3D([wrist[0], mcps[0][0]],
                                   [wrist[1], mcps[0][1]],
                                   [wrist[2], mcps[0][2]])
+    ax.add_line(line)
+
+    # Connext the left hand side of the index finger to the thumb.
+    thumb_mcp = points[:,1+2]
+    pinky_mcp = points[:,4+2]
+    line = plt3d.art3d.Line3D([thumb_mcp[0], pinky_mcp[0]],
+                                  [thumb_mcp[1], pinky_mcp[1]],
+                                  [thumb_mcp[2], pinky_mcp[2]])
     ax.add_line(line)
 
 def animate(i):
@@ -95,5 +103,5 @@ def main():
         plt.show()
     except KeyboardInterrupt:
         sys.exit(0)
-        
+
 main()
