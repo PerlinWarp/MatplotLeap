@@ -1,20 +1,60 @@
-import Leap
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
 from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d as plt3d
 
 import MatplotLeap as leapplot
 
-# Leap Motion Controller Setup
-controller = Leap.Controller()
-controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
-NUM_POINTS = 22
+# Example Positions
+NUM_POINTS = 22 # See Columns below for formatting
+points = np.array([
+	[  26.89253807,  50.71062469,  26.30517006,  -6.53940153, -28.20298195,
+	  -43.96928406,   1.59295416, -18.24504852, -15.59684658,  -9.10624218,
+	   18.74389076,  -4.08834696, -18.99320984, -28.7378273,   36.90289307,
+	   19.9671917,    6.81442356,  -2.79738522,  51.97451019,  43.90403748,
+	   36.57212448,  28.60396194],
+	 [ 35.12473297,  67.64217377,  79.15477753,  69.94815826,  60.34004593,
+	   58.72478104,  32.09606171,  11.13847065,  16.22161102,  24.88112068,
+	   22.31115341, -14.11880112, -31.75012016, -40.87027359,  15.9162302,
+	  -20.30714417, -39.99034882, -51.30535889,  10.07509327, -20.53441429,
+	  -36.16606903, -48.56869125],
+	 [151.66641235, 123.82020569, 118.66936493, 147.56196594, 166.81466675,
+	  180.52867126, 170.5990448,  145.15351868, 124.28096008, 113.46463776,
+	  168.91151428, 165.07273865, 154.32685852, 144.07644653, 162.14595032,
+	  160.73678589, 153.32025146, 145.6038208,  151.8303833, 152.60569763,
+	  149.65892029, 145.08146667]
+ ])
 
-SAVE = True
-points_list = []
+# Example Angles
+angles = np.array([
+	 [[ 6.80335651e-09, -4.51514916e-01, -1.10714834e+00],
+	  [-2.12284823e-01, -1.89584131e-02,  4.08588116e-03],
+	  [ 1.12782320e-01, -3.36439092e-09, -3.76808121e-09],
+	  [-2.43190810e-01, -1.47738551e-08, -3.13275023e-09]],
+
+	 [[ 1.51001870e-01, -1.66816955e-01, -2.52599157e-02],
+	  [ 1.26234886e+00,  1.18541579e-03,  3.72051055e-03],
+	  [ 1.10766007e+00, -9.07727204e-09,  1.62977681e-08],
+	  [ 5.22654522e-01, -1.12897120e-08,  1.53981473e-08]],
+
+	 [[ 1.48955348e-01, -2.95250742e-02,  1.46350714e-01],
+	  [ 5.97808271e-01,  1.37448961e-01,  9.30286183e-02],
+	  [ 3.72391062e-01, -4.33029963e-08, -9.43238189e-09],
+	  [ 2.40749485e-01, -2.57356516e-08, -1.51517855e-08]],
+
+	 [[ 1.50006118e-01,  1.21617516e-01,  2.20302218e-01],
+	  [ 5.11299735e-01,  1.47075129e-01,  8.20371808e-02],
+	  [ 3.06999060e-01,  2.59781033e-08, -1.21896506e-08],
+	  [ 2.05311882e-01,  3.33055462e-08, -4.01401060e-09]],
+
+	 [[ 1.09821361e-01,  2.62327266e-01,  3.74564087e-01],
+	  [ 4.06376774e-01,  2.33796594e-01,  9.93673235e-02],
+	  [ 2.64315977e-01,  2.51456589e-08,  2.37648319e-08],
+	  [ 1.84392151e-01, -5.94240413e-09,  5.29384378e-09]]
+])
+
+
 '''
 finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
 bone_names = ['MCP', 'PIP', 'DIP', 'TIP']
@@ -60,11 +100,6 @@ headers = headers[:-2]
 def on_close(event):
 	print("Closed Figure")
 
-	if (SAVE):
-		print("Saving all points gathered")
-		# Alternatively use pandas to remove need to make headers string.
-		np.savetxt("all_points.csv", points_list, delimiter=',', header=headers, comments='')
-
 # Matplotlib Setup
 fig = plt.figure()
 fig.canvas.mpl_connect('close_event', on_close)
@@ -73,7 +108,6 @@ ax2 = fig.add_subplot(122, projection='3d', xlim=(-300, 300), ylim=(-200, 400), 
 ax.view_init(elev=45., azim=122)
 ax2.view_init(elev=45., azim=122)
 
-points = np.zeros((3, NUM_POINTS))
 a_points = np.zeros((3, 16))
 patches = ax.scatter(points[0], points[1], points[2], s=[20]*NUM_POINTS, alpha=1)
 angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], s=[10]*16, alpha=1)
@@ -169,32 +203,22 @@ def get_angles(hand):
 		angles.append(bone_angles)
 	return angles
 
-def animate(i):
-	# Reset the plots
-	leapplot.reset_plot(ax)
-	leapplot.reset_plot(ax2)
 
-	points = leapplot.get_bone_points(controller)
-	a_points = points
+def main():
+	try:
+		# Reset the plots
+		leapplot.reset_plot(ax)
+		leapplot.reset_plot(ax2)
 
-	if (points is not None):
-		if (SAVE):
-			points_list.append(points.flatten())
+		a_points = points
 
-		patches = ax.scatter(points[0], points[1], points[2], s=[10]*NUM_POINTS, alpha=1)
-		leapplot.plot_points(points, patches)
-		leapplot.plot_bone_lines(points, ax)
-
-		frame = controller.frame()
-		hand = frame.hands.frontmost
-
-		if hand.is_valid:
-			#print('\r', leap_hand.get_angles(), end='')
-			angles = np.array(get_angles(hand))
+		if (points is not None):
+			patches = ax.scatter(points[0], points[1], points[2], s=[10]*NUM_POINTS, alpha=1)
+			leapplot.plot_points(points, patches)
+			leapplot.plot_bone_lines(points, ax)
 
 			print("angles", angles)
 			print("angles shape: ", angles.shape)
-
 
 			# Turn the angles into points
 			X = [0]
@@ -233,20 +257,16 @@ def animate(i):
 					Y.append(y)
 					Z.append(z)
 
-		# Convert to a numpy array
-		a_points = [X, Z, Y]
-		a_points = np.array(a_points)
+			# Convert to a numpy array
+			a_points = [X, Z, Y]
+			a_points = np.array(a_points)
 
-		# Creating the 2nd plot
-		angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], s=[10]*NUM_POINTS, alpha=1)
-		# Plot Angle points
-		leapplot.plot_points(a_points, angle_plot)
+			# Creating the 2nd plot
+			angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], s=[10]*NUM_POINTS, alpha=1)
+			# Plot Angle points
+			leapplot.plot_points(a_points, angle_plot)
 
-
-def main():
-	anim = animation.FuncAnimation(fig, animate, blit=False, interval=2)
-	try:
-		plt.show()
+			plt.show()
 	except KeyboardInterrupt:
 		sys.exit(0)
 
