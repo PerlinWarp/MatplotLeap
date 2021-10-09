@@ -11,9 +11,12 @@ sudo leapd
 # Open a seperate terminal
 python3 plot_hand.py
 ```
-  
+
 By default `plot_hand` saves all the gathered data in all_points.csv.   
 These can be animated and shown using `python3 animate_saved.py`.   
+
+### Windows Support
+resources/Windows includes a LeapSDK generated for Python 3.8 and Orion 4.1.0  
   
 ### Resources
 [Generating a Python 3.3.0 Wrapper with SWIG 2.0.9](https://support.leapmotion.com/hc/en-us/articles/360004362237-Generating-a-Python-3-3-0-Wrapper-with-SWIG-2-0-9)  
