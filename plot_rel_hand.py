@@ -1,10 +1,10 @@
-import Leap
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d as plt3d
 
+from resources.Windows import Leap
 import MatplotLeap as nl
 
 # Leap Motion Controller Setup

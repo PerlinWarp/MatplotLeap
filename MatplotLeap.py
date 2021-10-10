@@ -1,10 +1,11 @@
-import Leap
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import animation
 from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d as plt3d
+
+from resources.Windows import Leap
 
 # Leap Motion Hand Animation
 finger_bones = ['metacarpals', 'proximal', 'intermediate', 'distal']
@@ -230,16 +231,17 @@ def get_bone_points(controller):
 
 	# Add fingers
 	for finger in fingers:
-		for joint in range(0,4):
+		for b in range(0, 4):
 			'''
 			0 = JOINT_MCP – The metacarpophalangeal joint, or knuckle, of the finger.
 			1 = JOINT_PIP – The proximal interphalangeal joint of the finger. This joint is the middle joint of a finger.
 			2 = JOINT_DIP – The distal interphalangeal joint of the finger. This joint is closest to the tip.
 			3 = JOINT_TIP – The tip of the finger.
 			'''
-			X.append(-1 * finger.joint_position(joint)[0])
-			Y.append(finger.joint_position(joint)[1])
-			Z.append(finger.joint_position(joint)[2])
+			bone = finger.bone(b)
+			X.append(-1 * bone.prev_joint[0])
+			Y.append(bone.prev_joint[1])
+			Z.append(bone.prev_joint[2])
 
 	return np.array([X, Z, Y])
 

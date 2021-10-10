@@ -1,4 +1,3 @@
-import Leap
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,11 +5,11 @@ from matplotlib import animation
 from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d as plt3d
 
+from resources.Windows import Leap
 import MatplotLeap as leapplot
 
 # Leap Motion Controller Setup
 controller = Leap.Controller()
-controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
 NUM_POINTS = 22
 
 SAVE = True
@@ -238,7 +237,7 @@ def animate(i):
 		a_points = np.array(a_points)
 
 		# Creating the 2nd plot
-		angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], s=[10]*NUM_POINTS, alpha=1)
+		angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], alpha=1)
 		# Plot Angle points
 		leapplot.plot_points(a_points, angle_plot)
 
