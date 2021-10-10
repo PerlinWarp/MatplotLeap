@@ -17,7 +17,14 @@ These can be animated and shown using `python3 animate_saved.py`.
 
 ### Windows Support
 resources/Windows includes a LeapSDK generated for Python 3.8 and Orion 4.1.0  
-  
+
+If python3.8 is not your base install of windows, you may need to install a separate version.
+For example you can install python 3.8.9 [here](https://www.python.org/downloads/release/python-389/).
+You can install it in a virtualenv, see [tutorial](https://www.freecodecamp.org/news/installing-multiple-python-versions-on-windows-using-virtualenv/).
+
+
+
+
 ### Resources
 [Generating a Python 3.3.0 Wrapper with SWIG 2.0.9](https://support.leapmotion.com/hc/en-us/articles/360004362237-Generating-a-Python-3-3-0-Wrapper-with-SWIG-2-0-9)  
 [Using Leap Motion on Ubuntu](https://blog.keithkim.com/2020/07/note-leap-motion-on-ubuntu-2004.html)

@@ -9,7 +9,7 @@ import mpl_toolkits.mplot3d as plt3d
 
 # Leap Motion Controller Setup
 controller = Leap.Controller()
-controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
+#controller.set_policy_flags(Leap.Controller.POLICY_BACKGROUND_FRAMES)
 NUM_POINTS = 22
 
 SAVE = True
