@@ -287,7 +287,7 @@ def get_rel_bone_points(controller):
 
 	# Add fingers
 	for finger in fingers:
-		for joint in range(0,4):
+		for b in range(0,4):
 			'''
 			0 = JOINT_MCP – The metacarpophalangeal joint, or knuckle, of the finger.
 			1 = JOINT_PIP – The proximal interphalangeal joint of the finger. This joint is the middle joint of a finger.
@@ -295,7 +295,8 @@ def get_rel_bone_points(controller):
 			3 = JOINT_TIP – The tip of the finger.
 			'''
 			# Transform the finger
-			transformed_position = hand_transform.transform_point(finger.joint_position(joint))
+			bone = finger.bone(b)
+			transformed_position = hand_transform.transform_point(bone.prev_joint)
 			X.append(transformed_position[0])
 			Y.append(transformed_position[1])
 			Z.append(transformed_position[2])
