@@ -210,7 +210,7 @@ def animate(i):
 			for finger in range(0,5):
 				tmp = fingers_rel_orig[finger]#hand_transform.transform_point(hand.fingers[finger].bone(0).prev_joint)
 				prev_pos = [-tmp[0],tmp[1],tmp[2]] #[0,0,0]
-				prev_rot = get_rot_from_angles([0,math.pi,0])#np.identity(3)
+				prev_rot = get_rot_from_angles([0,math.pi,0 if finger != 0 else -math.pi*.6])#np.identity(3)
 				for bone in range(0,4):
 					pitch = angles[finger,bone, 0]
 					yaw = angles[finger,bone, 1]
