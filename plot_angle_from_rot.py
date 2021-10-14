@@ -209,7 +209,7 @@ def animate(i):
 			Z = [0]
 			for finger in range(0,5):
 				tmp = fingers_rel_orig[finger]#hand_transform.transform_point(hand.fingers[finger].bone(0).prev_joint)
-				prev_pos = [tmp[0] * (-1 if hand.is_left else 1),tmp[1],tmp[2]] #[0,0,0]
+				prev_pos = [-tmp[0],tmp[1],tmp[2]] #[0,0,0]
 				prev_rot = get_rot_from_angles([0,math.pi,0])#np.identity(3)
 				for bone in range(0,4):
 					pitch = angles[finger,bone, 0]
@@ -236,7 +236,7 @@ def animate(i):
 					y = new_bone[1]
 					z = new_bone[2]
 
-					X.append(x * (-1 if hand.is_left else 1))
+					X.append(-x)
 					Y.append(y)
 					Z.append(z)
 
