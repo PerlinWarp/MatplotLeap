@@ -56,6 +56,15 @@ for col in columns:
 	headers+= ","
 headers = headers[:-2]
 
+# relative origin of fingers for right hand
+fingers_rel_orig = [
+	[-19.6307, -6.59409, 54.1453],
+	[-12.1095, 13.6792, 45.7827],
+	[-0.628944, 14.6466, 42.306],
+	[10.7102, 11.9239, 41.1872],
+	[21.4952, 5.17447, 44.1176]
+]
+
 def on_close(event):
 	print("Closed Figure")
 
@@ -192,13 +201,16 @@ def animate(i):
 			#print("angles", angles)
 			#print("angles shape: ", angles.shape)
 
+			#hand_transform = Leap.Matrix(hand.basis.x_basis, hand.basis.y_basis, hand.basis.z_basis, hand.palm_position).rigid_inverse()
+
 			# Turn the angles into points
 			X = [0]
 			Y = [0]
 			Z = [0]
 			for finger in range(0,5):
-				prev_pos = [0,0,0]
-				prev_rot = np.identity(3)
+				tmp = fingers_rel_orig[finger]#hand_transform.transform_point(hand.fingers[finger].bone(0).prev_joint)
+				prev_pos = [tmp[0] * (-1 if hand.is_left else 1),tmp[1],tmp[2]] #[0,0,0]
+				prev_rot = get_rot_from_angles([0,math.pi,0])#np.identity(3)
 				for bone in range(0,4):
 					pitch = angles[finger,bone, 0]
 					yaw = angles[finger,bone, 1]
@@ -220,12 +232,11 @@ def animate(i):
 					# 		# Testing time
 					# 		print("nb", new_bone)
 
-
 					x = new_bone[0]
 					y = new_bone[1]
 					z = new_bone[2]
 
-					X.append(x)
+					X.append(x * (-1 if hand.is_left else 1))
 					Y.append(y)
 					Z.append(z)
 
@@ -237,7 +248,7 @@ def animate(i):
 		a_points = np.array(a_points)
 
 		# Creating the 2nd plot
-		angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], alpha=1)
+		angle_plot = ax2.scatter(a_points[0], a_points[1], a_points[2], s=10, alpha=1)
 		# Plot Angle points
 		leapplot.plot_points(a_points, angle_plot)
 
